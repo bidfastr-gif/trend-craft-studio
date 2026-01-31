@@ -4,10 +4,6 @@ import { useLocation } from "react-router-dom";
 const ScrollToAnchor = () => {
   const { hash, pathname } = useLocation();
   const pathToId: Record<string, string> = {
-    "/how-it-works": "how-it-works",
-    "/templates": "templates",
-    "/pricing": "pricing",
-    "/faq": "faq",
     "/request": "request-form",
   };
 

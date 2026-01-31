@@ -40,8 +40,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-6"
           >
-            Turn Viral Trends Into{" "}
-            <span className="gradient-text">Brand Videos</span>
+            Explode Your Reach with{" "}
+            <span className="gradient-text">Viral Brand Videos</span>
           </motion.h1>
 
           <motion.p 
@@ -50,7 +50,7 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg sm:text-xl text-pink-100 max-w-xl mx-auto mb-8"
           >
-            Submit your trend idea, upload your logo, and our team will create viral reels for your brand delivered directly to WhatsApp.
+            Stop chasing trends—start owning them. We transform viral moments into high-converting branded content, delivered straight to your WhatsApp in 24 hours.
           </motion.p>
 
           <motion.div 
@@ -61,7 +61,7 @@ const HeroSection = () => {
           >
             <Button variant="hero" size="xl" asChild>
               <a href="/request">
-                Start Your Request
+                Create My Trend Video
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>
@@ -92,7 +92,7 @@ const HeroSection = () => {
             </div>
             <div className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">500+</span> brands
-              trust Trendcraft
+              dominating social media with Trendcraft
             </div>
           </motion.div>
         </div>

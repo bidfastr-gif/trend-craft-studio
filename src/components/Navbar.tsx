@@ -6,10 +6,11 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
+    { name: "Home", href: "/" },
     { name: "How It Works", href: "/how-it-works" },
     { name: "Templates", href: "/templates" },
     { name: "Pricing", href: "/pricing" },
-    { name: "FAQ", href: "/faq" },
+    { name: "Contact Us", href: "/contact" },
   ];
 
   return (
