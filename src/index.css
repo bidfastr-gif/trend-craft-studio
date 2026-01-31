@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Trendcraft Design System - Premium Light SaaS Theme */
+
+@layer base {
+  :root {
+    /* LIGHTEST: Main Background Color (Dark for new theme) */
+    --background: 224 71% 4%;
+    /* DARKEST: Main Text Color (Light for new theme) */
+    --foreground: 0 0% 100%;
+
+    /* LIGHTEST: Card Background */
+    --card: 224 71% 4%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 0 0% 100%;
+
+    /* BRIGHT: Accent Color (Pink/Magenta) */
+    --primary: 343 87% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* LIGHT: Secondary Background Color */
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 32% 17%;
+    /* DARK: Secondary Text Color */
+    --muted-foreground: 0 0% 95%;
+
+    --accent: 217 32% 17%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 343 87% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom gradient tokens - Red/Dark Theme */
+    --gradient-primary: linear-gradient(135deg, hsl(343 87% 55%) 0%, hsl(320 80% 50%) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(343 87% 55% / 0.3) 0%, hsl(320 80% 50% / 0.3) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(224 71% 4%) 0%, hsl(224 71% 10%) 100%);
+    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(343 87% 55% / 0.15) 0%, transparent 60%);
+    
+    /* Shadow tokens - Dark Theme */
+    --shadow-glow: 0 0 60px hsl(343 87% 55% / 0.2);
+    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.5);
+    --shadow-button: 0 0 20px hsl(343 87% 55% / 0.4);
+
+    /* Animation tokens */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html {
+    background: #0f172a;
+  }
+  
+  body {
+    @apply text-foreground antialiased;
+    background: linear-gradient(135deg, #A8415B 0%, #334155 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply text-white;
+  }
+  
+  .brand-gradient {
+    @apply bg-gradient-to-br from-primary via-accent to-secondary;
+    background-image: var(--gradient-primary);
+  }
+
+  .gradient-border {
+    @apply relative rounded-xl bg-card/50 backdrop-blur-sm border border-transparent;
+    background-clip: padding-box;
+  }
+
+  .gradient-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl;
+    padding: 1px;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .glass-card {
+    @apply rounded-xl border border-border/50 bg-card/40 backdrop-blur-md shadow-xl;
+  }
+}
