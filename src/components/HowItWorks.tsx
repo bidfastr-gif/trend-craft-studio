@@ -90,7 +90,7 @@ const HowItWorks = () => {
                 </div>
 
                 {/* Card */}
-                <div className="glass-card p-6 rounded-2xl h-full transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-[0_0_30px_hsl(262_83%_58%/0.2)]">
+                <div className="glass-card p-6 rounded-2xl h-full transition-all duration-300 group-hover:-translate-y-2 group-hover:border-primary group-hover:shadow-[0_0_50px_hsl(343_87%_55%/0.5)] group-hover:bg-primary/5">
                   {/* Icon */}
                   <div
                     className={`w-14 h-14 rounded-xl bg-gradient-to-br ${step.gradient} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}
@@ -117,22 +117,22 @@ const HowItWorks = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="grid md:grid-cols-3 gap-8 mt-16"
         >
-          <div className="bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="group bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center transition-all duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-[0_0_50px_hsl(343_87%_55%/0.5)] hover:bg-primary/5">
+            <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
               <Zap className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-xl font-bold mb-2">Lightning Fast</h3>
             <p className="text-muted-foreground">Get your fully edited video delivered within 24 hours of request.</p>
           </div>
-          <div className="bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="w-6 h-6 text-accent" />
+          <div className="group bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center transition-all duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-[0_0_50px_hsl(343_87%_55%/0.5)] hover:bg-primary/5">
+            <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <ShieldCheck className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-xl font-bold mb-2">100% Satisfaction</h3>
             <p className="text-muted-foreground">Unlimited revisions until you are completely happy with the result.</p>
           </div>
-          <div className="bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="group bg-background/50 backdrop-blur-sm border border-white/10 p-6 rounded-2xl text-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500 hover:shadow-[0_0_50px_hsl(330_81%_60%/0.5)] hover:bg-pink-500/5">
+            <div className="w-12 h-12 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
               <CheckCircle className="w-6 h-6 text-pink-500" />
             </div>
             <h3 className="text-xl font-bold mb-2">Trend Accurate</h3>

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Upload, Send, Sparkles, CreditCard } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const industries = [
   "Restaurant",
@@ -33,27 +34,71 @@ const plans = [
 ];
 
 const RequestForm = () => {
-  const [fileName, setFileName] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form State
+  const [formData, setFormData] = useState({
+    videoDescription: "",
+    reelLink: "",
+    brandName: "",
+    industry: "",
+    tone: "",
+    offerCta: "",
+    plan: "",
+    deliveryPreference: "",
+    whatsapp: "",
+    email: "",
+    fileName: "",
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFileName(e.target.files[0].name);
+      setFormData((prev) => ({ ...prev, fileName: e.target.files![0].name }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    toast.success("Request submitted! We will send the created video to your WhatsApp.");
-    setIsSubmitting(false);
-    
-    // Here you would redirect to payment page
-    // window.location.href = "/payment";
+
+    try {
+      const { error } = await supabase.from("requests").insert([
+        {
+          video_description: formData.videoDescription,
+          reel_link: formData.reelLink,
+          brand_name: formData.brandName,
+          industry: formData.industry,
+          tone: formData.tone,
+          logo_filename: formData.fileName,
+          offer_cta: formData.offerCta,
+          plan: formData.plan,
+          delivery_preference: formData.deliveryPreference,
+          whatsapp: formData.whatsapp,
+          email: formData.email,
+          status: "pending_payment", // Initial status
+        },
+      ]);
+
+      if (error) throw error;
+
+      toast.success("Request saved! Redirecting to payment...");
+      
+      // Simulate delay for UX
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      // Here you would redirect to payment page
+      // window.location.href = "/payment";
+      
+    } catch (error: any) {
+      console.error("Error submitting request:", error);
+      toast.error(error.message || "Failed to submit request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -94,6 +139,8 @@ const RequestForm = () => {
                   placeholder="Describe the video you want... e.g., 'Penguin trend for my spa, showing relaxation and calm vibes'"
                   className="min-h-[100px] bg-secondary/50"
                   required
+                  value={formData.videoDescription}
+                  onChange={(e) => handleInputChange("videoDescription", e.target.value)}
                 />
               </div>
 
@@ -107,6 +154,8 @@ const RequestForm = () => {
                   type="url"
                   placeholder="https://www.instagram.com/reel/..."
                   className="bg-secondary/50"
+                  value={formData.reelLink}
+                  onChange={(e) => handleInputChange("reelLink", e.target.value)}
                 />
               </div>
 
@@ -120,13 +169,15 @@ const RequestForm = () => {
                     placeholder="Your brand name"
                     className="bg-secondary/50"
                     required
+                    value={formData.brandName}
+                    onChange={(e) => handleInputChange("brandName", e.target.value)}
                   />
                 </div>
 
                 {/* Industry */}
                 <div className="space-y-2">
                   <Label>Industry *</Label>
-                  <Select required>
+                  <Select required onValueChange={(val) => handleInputChange("industry", val)}>
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select industry" />
                     </SelectTrigger>
@@ -143,7 +194,7 @@ const RequestForm = () => {
                 {/* Tone */}
                 <div className="space-y-2">
                   <Label>Tone *</Label>
-                  <Select required>
+                  <Select required onValueChange={(val) => handleInputChange("tone", val)}>
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select tone" />
                     </SelectTrigger>
@@ -167,7 +218,7 @@ const RequestForm = () => {
                       className="hidden"
                       id="logo-upload"
                       onChange={handleFileChange}
-                      required
+                      required={!formData.fileName}
                     />
                     <label
                       htmlFor="logo-upload"
@@ -175,7 +226,7 @@ const RequestForm = () => {
                     >
                       <Upload className="w-4 h-4 text-muted-foreground" />
                       <span className="text-sm text-muted-foreground truncate">
-                        {fileName || "Choose logo file..."}
+                        {formData.fileName || "Choose logo file..."}
                       </span>
                     </label>
                   </div>
@@ -190,6 +241,8 @@ const RequestForm = () => {
                   placeholder="e.g., '50% off this weekend' or 'Book now'"
                   className="bg-secondary/50"
                   required
+                  value={formData.offerCta}
+                  onChange={(e) => handleInputChange("offerCta", e.target.value)}
                 />
               </div>
 
@@ -198,7 +251,7 @@ const RequestForm = () => {
                 {/* Choose Plan */}
                 <div className="space-y-2">
                   <Label>Choose Plan *</Label>
-                  <Select required>
+                  <Select required onValueChange={(val) => handleInputChange("plan", val)}>
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select plan" />
                     </SelectTrigger>
@@ -215,7 +268,7 @@ const RequestForm = () => {
                 {/* Delivery Preference */}
                 <div className="space-y-2">
                   <Label>Delivery Preference *</Label>
-                  <Select required>
+                  <Select required onValueChange={(val) => handleInputChange("deliveryPreference", val)}>
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select delivery time" />
                     </SelectTrigger>
@@ -239,6 +292,8 @@ const RequestForm = () => {
                     placeholder="+91 98765 43210"
                     className="bg-secondary/50"
                     required
+                    value={formData.whatsapp}
+                    onChange={(e) => handleInputChange("whatsapp", e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -249,6 +304,8 @@ const RequestForm = () => {
                     placeholder="you@company.com"
                     className="bg-secondary/50"
                     required
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                   />
                 </div>
               </div>

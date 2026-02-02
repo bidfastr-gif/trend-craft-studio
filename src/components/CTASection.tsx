@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 const CTASection = () => {
   return (
-    <section className="relative overflow-hidden border-t border-border/50">
+    <section className="relative overflow-hidden">
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-16 lg:py-24 text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4">
