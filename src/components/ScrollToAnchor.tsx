@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const pathToId: Record<string, string> = {
+  "/how-it-works": "how-it-works",
+  "/templates": "templates",
+  "/pricing": "pricing",
+  "/faq": "faq",
   "/request": "request-form",
 };
 
