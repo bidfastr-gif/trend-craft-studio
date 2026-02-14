@@ -7,42 +7,36 @@ const templates = [
     name: "Penguin Trend",
     description: "Cute penguin reaction going viral",
     image: "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     views: "2.5M",
   },
   {
     name: "Anime AI Transform",
     description: "Turn your footage into Studio Ghibli style",
     image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     views: "5.4M",
   },
   {
     name: "Before/After Calm",
     description: "Satisfying transformation reveal",
     image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     views: "1.8M",
   },
   {
     name: "Crowd Gasp Trend",
     description: "Dramatic crowd reaction meme",
     image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     views: "3.2M",
   },
   {
     name: "Statue Reveal",
     description: "Epic product unveil moment",
     image: "https://images.unsplash.com/photo-1564399580075-5dfe19c205f3?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     views: "2.1M",
   },
   {
     name: "Festival Reaction",
     description: "High-energy celebration vibes",
     image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     views: "4.1M",
   },
 ];
@@ -107,24 +101,13 @@ const TrendTemplates = () => {
                 }
               }}
             >
-              {/* Image/Video */}
+              {/* Image */}
               <div className="relative aspect-[9/16] overflow-hidden">
-                {template.video ? (
-                  <video
-                    src={template.video}
-                    poster={template.image}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    muted
-                    loop
-                    playsInline
-                  />
-                ) : (
-                  <img
-                    src={template.image}
-                    alt={template.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                )}
+                <img
+                  src={template.image}
+                  alt={template.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 
                 {/* Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
