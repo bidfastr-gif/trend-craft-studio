@@ -97,13 +97,23 @@ const TrendTemplates = () => {
               className="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(262_83%_58%/0.2)]"
               onMouseEnter={(e) => {
                 const video = e.currentTarget.querySelector("video");
-                if (video) video.play();
+                if (video) {
+                  if (!video.getAttribute("src") && template.video) {
+                    video.setAttribute("src", template.video);
+                    video.load();
+                  }
+                  video.play();
+                }
               }}
               onMouseLeave={(e) => {
                 const video = e.currentTarget.querySelector("video");
                 if (video) {
                   video.pause();
                   video.currentTime = 0;
+                  if (video.getAttribute("src")) {
+                    video.removeAttribute("src");
+                    video.load();
+                  }
                 }
               }}
             >
@@ -111,12 +121,13 @@ const TrendTemplates = () => {
               <div className="relative aspect-[9/16] overflow-hidden">
                 {template.video ? (
                   <video
-                    src={template.video}
                     poster={template.image}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     muted
                     loop
                     playsInline
+                    preload="none"
+                    crossOrigin="anonymous"
                   />
                 ) : (
                   <img

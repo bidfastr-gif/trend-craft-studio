@@ -93,9 +93,10 @@ const RequestForm = () => {
       // Here you would redirect to payment page
       // window.location.href = "/payment";
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error submitting request:", error);
-      toast.error(error.message || "Failed to submit request. Please try again.");
+      const message = error instanceof Error ? error.message : "Failed to submit request. Please try again.";
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

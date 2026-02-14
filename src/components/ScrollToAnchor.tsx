@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+const pathToId: Record<string, string> = {
+  "/request": "request-form",
+};
+
 const ScrollToAnchor = () => {
   const { hash, pathname } = useLocation();
-  const pathToId: Record<string, string> = {
-    "/request": "request-form",
-  };
-
   useEffect(() => {
     if (hash) {
       const timer = setTimeout(() => {
