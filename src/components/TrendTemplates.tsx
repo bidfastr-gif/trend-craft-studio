@@ -1,48 +1,77 @@
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
 import { motion } from "framer-motion";
 
 const templates = [
   {
+    name: "AI Baby Girl 3D Cartoon Dance",
+    description: "Cute 3D character dance for attention-grabbing intros",
+    image: "https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?auto=format&fit=crop&w=800&q=80",
+    views: "9.8M",
+  },
+  {
+    name: "AI Shelter Challenge",
+    description: "Dramatic reveal challenge with before/after style",
+    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    views: "7.2M",
+  },
+  {
+    name: "Talking to AI in 2026",
+    description: "Conversation-style skit with futuristic UI overlays",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+    views: "8.4M",
+  },
+  {
+    name: "Assembly Effect (Kling 2.6)",
+    description: "Parts assemble into the final product with snappy beats",
+    image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80",
+    views: "6.1M",
+  },
+  {
+    name: "New Viral AI Trend",
+    description: "Fresh AI-powered effect making rounds this week",
+    image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=800&q=80",
+    views: "10.2M",
+  },
+  {
+    name: "Subway Surfer Overlay",
+    description: "Gameplay overlay keeps attention during narration",
+    image: "https://images.unsplash.com/photo-1520975922203-d12a0b47f4f1?auto=format&fit=crop&w=800&q=80",
+    views: "6.7M",
+  },
+  {
     name: "Penguin Trend",
     description: "Cute penguin reaction going viral",
     image: "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     views: "2.5M",
   },
   {
     name: "Anime AI Transform",
     description: "Turn your footage into Studio Ghibli style",
     image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     views: "5.4M",
   },
   {
     name: "Before/After Calm",
     description: "Satisfying transformation reveal",
     image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     views: "1.8M",
   },
   {
     name: "Crowd Gasp Trend",
     description: "Dramatic crowd reaction meme",
     image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     views: "3.2M",
   },
   {
     name: "Statue Reveal",
     description: "Epic product unveil moment",
     image: "https://images.unsplash.com/photo-1564399580075-5dfe19c205f3?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     views: "2.1M",
   },
   {
     name: "Festival Reaction",
     description: "High-energy celebration vibes",
     image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
-    video: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     views: "4.1M",
   },
 ];
@@ -95,43 +124,14 @@ const TrendTemplates = () => {
               key={template.name}
               variants={item}
               className="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(262_83%_58%/0.2)]"
-              onMouseEnter={(e) => {
-                const video = e.currentTarget.querySelector("video");
-                if (video) video.play();
-              }}
-              onMouseLeave={(e) => {
-                const video = e.currentTarget.querySelector("video");
-                if (video) {
-                  video.pause();
-                  video.currentTime = 0;
-                }
-              }}
             >
               {/* Image/Video */}
               <div className="relative aspect-[9/16] overflow-hidden">
-                {template.video ? (
-                  <video
-                    src={template.video}
-                    poster={template.image}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    muted
-                    loop
-                    playsInline
-                  />
-                ) : (
-                  <img
-                    src={template.image}
-                    alt={template.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                )}
-                
-                {/* Play Button */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  <div className="w-14 h-14 rounded-full bg-primary/90 backdrop-blur flex items-center justify-center">
-                    <Play className="w-6 h-6 text-primary-foreground ml-1" />
-                  </div>
-                </div>
+                <img
+                  src={template.image}
+                  alt={template.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
                 {/* Views Badge */}
                 <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-medium">

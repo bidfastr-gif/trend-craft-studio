@@ -66,6 +66,10 @@ const RequestForm = () => {
     setIsSubmitting(true);
 
     try {
+      if (!supabase) {
+        toast.error("Service not configured. Please try again later.");
+        return;
+      }
       const { error } = await supabase.from("requests").insert([
         {
           video_description: formData.videoDescription,
@@ -93,9 +97,10 @@ const RequestForm = () => {
       // Here you would redirect to payment page
       // window.location.href = "/payment";
       
-    } catch (error: any) {
-      console.error("Error submitting request:", error);
-      toast.error(error.message || "Failed to submit request. Please try again.");
+    } catch (err) {
+      console.error("Error submitting request:", err);
+      const message = err instanceof Error ? err.message : "Failed to submit request. Please try again.";
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
