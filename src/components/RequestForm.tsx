@@ -90,9 +90,23 @@ const RequestForm = () => {
       // Simulate delay for UX
       await new Promise((resolve) => setTimeout(resolve, 1500));
       
-      // Here you would redirect to payment page
-      // window.location.href = "/payment";
+      // Reset form after successful submission
+      setFormData({
+        videoDescription: "",
+        reelLink: "",
+        brandName: "",
+        industry: "",
+        tone: "",
+        offerCta: "",
+        plan: "",
+        deliveryPreference: "",
+        whatsapp: "",
+        email: "",
+        fileName: "",
+      });
       
+      // TODO: Implement payment redirect
+      // window.location.href = "/payment";      
     } catch (error: unknown) {
       console.error("Error submitting request:", error);
       const message = error instanceof Error ? error.message : "Failed to submit request. Please try again.";
