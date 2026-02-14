@@ -94,9 +94,20 @@ const RequestForm = () => {
       // Simulate delay for UX
       await new Promise((resolve) => setTimeout(resolve, 1500));
       
-      // Here you would redirect to payment page
-      // window.location.href = "/payment";
-      
+      // Reset form after successful submission
+      setFormData({
+        videoDescription: "",
+        reelLink: "",
+        brandName: "",
+        industry: "",
+        tone: "",
+        offerCta: "",
+        plan: "",
+        deliveryPreference: "",
+        whatsapp: "",
+        email: "",
+        fileName: "",
+      });
     } catch (err) {
       console.error("Error submitting request:", err);
       const message = err instanceof Error ? err.message : "Failed to submit request. Please try again.";

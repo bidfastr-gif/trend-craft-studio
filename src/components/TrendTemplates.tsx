@@ -123,7 +123,6 @@ const TrendTemplates = () => {
             <motion.div
               key={template.name}
               variants={item}
-              className="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(262_83%_58%/0.2)]"
             >
               {/* Image/Video */}
               <div className="relative aspect-[9/16] overflow-hidden">
