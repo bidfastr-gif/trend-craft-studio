@@ -164,7 +164,7 @@ const PricingSection = () => {
                 className="w-full"
                 asChild
               >
-                <a href="#request-form">{plan.cta}</a>
+                <a href="/request">{plan.cta}</a>
               </Button>
             </motion.div>
           ))}

@@ -13,6 +13,12 @@ import {
 import { Upload, Send, Sparkles, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  loadRazorpay,
+  openRazorpayCheckout,
+  RazorpayOptions,
+  RazorpayResponse,
+} from "@/integrations/razorpay/client";
 
 const industries = [
   "Restaurant",
@@ -35,8 +41,8 @@ const plans = [
 
 const RequestForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // Form State
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+
   const [formData, setFormData] = useState({
     videoDescription: "",
     reelLink: "",
@@ -57,7 +63,9 @@ const RequestForm = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, fileName: e.target.files![0].name }));
+      const file = e.target.files[0];
+      setLogoFile(file);
+      setFormData((prev) => ({ ...prev, fileName: file.name }));
     }
   };
 
@@ -66,33 +74,145 @@ const RequestForm = () => {
     setIsSubmitting(true);
 
     try {
+      const requestId = crypto.randomUUID();
+      let logoPath: string | null = null;
+      let logoUrl: string | null = null;
+
+      const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
+      if (!keyId) {
+        toast.error("Razorpay key not configured.");
+        return;
+      }
+      const ok = await loadRazorpay();
+      if (!ok) {
+        toast.error("Failed to load payment gateway.");
+        return;
+      }
       if (!supabase) {
         toast.error("Service not configured. Please try again later.");
         return;
       }
+
+      if (logoFile) {
+        const ext = logoFile.name.split(".").pop() || "png";
+        const path = `logos/${requestId}.${ext}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("brand-logos")
+          .upload(path, logoFile, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: logoFile.type || undefined,
+          });
+        if (uploadError) throw uploadError;
+        logoPath = uploadData?.path ?? path;
+        const { data } = supabase.storage
+          .from("brand-logos")
+          .getPublicUrl(logoPath);
+        logoUrl = data.publicUrl || null;
+      }
+
       const { error } = await supabase.from("requests").insert([
         {
+          id: requestId,
           video_description: formData.videoDescription,
           reel_link: formData.reelLink,
           brand_name: formData.brandName,
           industry: formData.industry,
           tone: formData.tone,
-          logo_filename: formData.fileName,
+          logo_filename: logoUrl || logoPath || formData.fileName,
           offer_cta: formData.offerCta,
           plan: formData.plan,
           delivery_preference: formData.deliveryPreference,
           whatsapp: formData.whatsapp,
           email: formData.email,
           status: "pending_payment", // Initial status
-        },
+        }
       ]);
 
       if (error) throw error;
 
-      toast.success("Request saved! Redirecting to payment...");
-      
-      // Simulate delay for UX
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      try {
+        await fetch("https://formspree.io/f/xgolyeal", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            requestId,
+            videoDescription: formData.videoDescription,
+            reelLink: formData.reelLink,
+            brandName: formData.brandName,
+            industry: formData.industry,
+            tone: formData.tone,
+            offerCta: formData.offerCta,
+            plan: formData.plan,
+            deliveryPreference: formData.deliveryPreference,
+            whatsapp: formData.whatsapp,
+            email: formData.email,
+          logoUrl: logoUrl,
+            status: "pending_payment",
+          }),
+        });
+      } catch (formspreeErr) {
+        console.error("Error sending data to Formspree:", formspreeErr);
+      }
+
+      const planToAmount: Record<string, number> = {
+        "Starter (₹4,999)": 4999,
+        "Creator (₹9,999/mo)": 9999,
+        "Agency Pro (₹29,999/mo)": 29999,
+      };
+      const amountRupees = planToAmount[formData.plan] ?? 4999;
+      const amountPaise = amountRupees * 100;
+
+      const options: RazorpayOptions = {
+        key: keyId,
+        amount: amountPaise.toString(),
+        currency: "INR",
+        name: "Trendcraft",
+        description: formData.plan || "Trendcraft Plan",
+        method: {
+          card: true,
+          upi: true,
+          netbanking: true,
+          wallet: false,
+          emi: false,
+          paylater: false,
+        },
+        prefill: {
+          name: formData.brandName || "Customer",
+          email: formData.email,
+          contact: formData.whatsapp,
+        },
+        notes: {
+          brandName: formData.brandName,
+          plan: formData.plan,
+          email: formData.email,
+            request_id: requestId,
+        },
+        theme: { color: "#f31260" },
+        handler: async (_response: RazorpayResponse) => {
+          try {
+            await supabase
+              .from("requests")
+              .update({ status: "paid" })
+              .eq("id", requestId);
+            toast.success("Payment successful. We will start your order.");
+          } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to update payment status.";
+            toast.error(msg);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            toast.error("Payment cancelled.");
+          },
+        },
+      };
+
+      openRazorpayCheckout(options);
+      toast.success("Opening payment...");
       
       // Reset form after successful submission
       setFormData({
@@ -108,6 +228,7 @@ const RequestForm = () => {
         email: "",
         fileName: "",
       });
+      setLogoFile(null);
     } catch (err) {
       console.error("Error submitting request:", err);
       const message = err instanceof Error ? err.message : "Failed to submit request. Please try again.";
