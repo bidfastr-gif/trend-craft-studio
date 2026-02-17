@@ -1,78 +1,70 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import video1 from "@/assets/Videos/Video1.mp4";
+import video2 from "@/assets/Videos/Video2.mp4";
+import video3 from "@/assets/Videos/Video3.mp4";
+import video4 from "@/assets/Videos/Video4.mp4";
+import video5 from "@/assets/Videos/Video5.mp4";
+import video6 from "@/assets/Videos/Video6.mp4";
+import video7 from "@/assets/Videos/Video7.mp4";
+import video8 from "@/assets/Videos/Video8.mp4";
 
-const templates = [
+type Template = {
+  name: string;
+  description: string;
+  views: string;
+  video?: string;
+  image?: string;
+};
+
+const templates: Template[] = [
   {
-    name: "AI Baby Girl 3D Cartoon Dance",
-    description: "Cute 3D character dance for attention-grabbing intros",
-    image: "https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?auto=format&fit=crop&w=800&q=80",
+    name: "Skyfall Hook",
+    description: "Surreal freefall through the clouds for dramatic hooks and bold intros",
+    video: video1,
     views: "9.8M",
   },
   {
-    name: "AI Shelter Challenge",
-    description: "Dramatic reveal challenge with before/after style",
-    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    name: "Floating House Reveal",
+    description: "Cinematic floating house reveal for storytelling edits and big announcements",
+    video: video2,
     views: "7.2M",
   },
   {
-    name: "Talking to AI in 2026",
-    description: "Conversation-style skit with futuristic UI overlays",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+    name: "Flying Car Launch",
+    description: "High-energy car launch in the sky for hype moments and viral reveals",
+    video: video3,
     views: "8.4M",
   },
   {
-    name: "Assembly Effect (Kling 2.6)",
-    description: "Parts assemble into the final product with snappy beats",
-    image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80",
+    name: "Billboard Takeover",
+    description: "City billboard takeover shot perfect for product drops and brand reveals",
+    video: video4,
     views: "6.1M",
   },
   {
-    name: "New Viral AI Trend",
-    description: "Fresh AI-powered effect making rounds this week",
-    image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=800&q=80",
-    views: "10.2M",
+    name: "Fountain Glow-Up",
+    description: "Satisfying fountain slow-motion for glow-ups, transformations and before/after edits",
+    video: video5,
+    views: "6.2M",
   },
   {
-    name: "Subway Surfer Overlay",
-    description: "Gameplay overlay keeps attention during narration",
-    image: "https://images.unsplash.com/photo-1520975922203-d12a0b47f4f1?auto=format&fit=crop&w=800&q=80",
+    name: "Urban Motion Rush",
+    description: "Fast-paced urban motion clip ideal for transitions and energetic sequences",
+    video: video6,
     views: "6.7M",
   },
   {
-    name: "Penguin Trend",
-    description: "Cute penguin reaction going viral",
-    image: "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80",
+    name: "Skyline Intro",
+    description: "Cinematic skyline moment for mood-setting intros, hooks or outros",
+    video: video7,
     views: "2.5M",
   },
   {
-    name: "Anime AI Transform",
-    description: "Turn your footage into Studio Ghibli style",
-    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
+    name: "Street Reaction",
+    description: "Dynamic street-level shot perfect for reactions, overlays and commentary",
+    video: video8,
     views: "5.4M",
-  },
-  {
-    name: "Before/After Calm",
-    description: "Satisfying transformation reveal",
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-    views: "1.8M",
-  },
-  {
-    name: "Crowd Gasp Trend",
-    description: "Dramatic crowd reaction meme",
-    image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=800&q=80",
-    views: "3.2M",
-  },
-  {
-    name: "Statue Reveal",
-    description: "Epic product unveil moment",
-    image: "https://images.unsplash.com/photo-1564399580075-5dfe19c205f3?auto=format&fit=crop&w=800&q=80",
-    views: "2.1M",
-  },
-  {
-    name: "Festival Reaction",
-    description: "High-energy celebration vibes",
-    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
-    views: "4.1M",
   },
 ];
 
@@ -117,22 +109,27 @@ const TrendTemplates = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {templates.map((template) => (
-            <motion.div
-              key={template.name}
-              variants={item}
-            >
-              {/* Image/Video */}
-              <div className="relative aspect-[9/16] overflow-hidden">
-                <img
-                  src={template.image}
-                  alt={template.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-
-                {/* Views Badge */}
+            <motion.div key={template.name} variants={item}>
+              <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
+                {template.video ? (
+                  <video
+                    src={template.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={template.image}
+                    alt={template.name}
+                    className="w-full h-full object-cover"
+                  />
+                )}
                 <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-medium">
                   {template.views} views
                 </div>
