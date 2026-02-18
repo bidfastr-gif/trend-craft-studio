@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,7 @@ import {
   RazorpayOptions,
   RazorpayResponse,
 } from "@/integrations/razorpay/client";
+import { useLocation } from "react-router-dom";
 
 const industries = [
   "Restaurant",
@@ -40,11 +41,16 @@ const plans = [
 ];
 
 const RequestForm = () => {
+  const location = useLocation();
+  const presetVideoDescription =
+    (location.state as { presetVideoDescription?: string } | null)
+      ?.presetVideoDescription ?? "";
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
 
   const [formData, setFormData] = useState({
-    videoDescription: "",
+    videoDescription: presetVideoDescription,
     reelLink: "",
     brandName: "",
     industry: "",
@@ -56,6 +62,15 @@ const RequestForm = () => {
     email: "",
     fileName: "",
   });
+
+  useEffect(() => {
+    if (presetVideoDescription) {
+      setFormData((prev) => ({
+        ...prev,
+        videoDescription: presetVideoDescription,
+      }));
+    }
+  }, [presetVideoDescription]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -163,15 +178,20 @@ const RequestForm = () => {
         "Creator (₹9,999/mo)": 9999,
         "Agency Pro (₹29,999/mo)": 29999,
       };
-      const amountRupees = planToAmount[formData.plan] ?? 4999;
-      const amountPaise = amountRupees * 100;
+      const baseAmountRupees = planToAmount[formData.plan] ?? 4999;
+      const deliveryFeeRupees =
+        formData.deliveryPreference === "express" ? 999 : 0;
+      const totalAmountRupees = baseAmountRupees + deliveryFeeRupees;
+      const amountPaise = totalAmountRupees * 100;
 
       const options: RazorpayOptions = {
         key: keyId,
         amount: amountPaise.toString(),
         currency: "INR",
         name: "Trendcraft",
-        description: formData.plan || "Trendcraft Plan",
+        description:
+          formData.plan ||
+          "Trendcraft Plan",
         method: {
           card: true,
           upi: true,
@@ -198,7 +218,23 @@ const RequestForm = () => {
               .from("requests")
               .update({ status: "paid" })
               .eq("id", requestId);
-            toast.success("Payment successful. We will start your order.");
+            try {
+              const { error: authError } = await supabase.auth.signInWithOtp({
+                email: formData.email,
+                options: {
+                  shouldCreateUser: true,
+                },
+              });
+              if (authError) {
+                console.error("Error sending payment confirmation email:", authError);
+                toast.error("Email could not be sent. Please check Supabase Auth email settings.");
+              } else {
+                toast.success("Payment successful. A confirmation email has been sent.");
+              }
+            } catch (emailError) {
+              console.error("Error sending payment confirmation email:", emailError);
+              toast.error("Email could not be sent. Please check Supabase Auth email settings.");
+            }
           } catch (e) {
             const msg = e instanceof Error ? e.message : "Failed to update payment status.";
             toast.error(msg);
@@ -247,9 +283,9 @@ const RequestForm = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground shadow-lg mb-6">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">
               Get Your Custom Video
             </span>
           </div>

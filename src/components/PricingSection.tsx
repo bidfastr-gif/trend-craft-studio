@@ -11,10 +11,9 @@ const plans = [
     icon: Zap,
     features: [
       "1 trend video",
-      "3 video options to choose from",
       "48-hour delivery",
       "HD quality output",
-      "1 revision included",
+      "2 revision included",
     ],
     cta: "Start Now",
     popular: false,

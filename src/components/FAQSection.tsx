@@ -19,7 +19,7 @@ const faqs = [
   {
     question: "Do you add my logo automatically?",
     answer:
-      "Yes, we seamlessly integrate your logo, brand colors, and CTA into the video. The result looks natural and on-brand, not like a simple overlay.",
+      "Yes – once you add your logo in the request form, we seamlessly integrate it along with your brand colors and CTA into the video. The result looks natural and on-brand, not like a simple overlay.",
   },
   {
     question: "Can agencies resell videos?",

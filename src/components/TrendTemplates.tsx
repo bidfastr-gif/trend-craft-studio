@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import video1 from "@/assets/Videos/Video1.mp4";
 import video2 from "@/assets/Videos/Video2.mp4";
 import video3 from "@/assets/Videos/Video3.mp4";
@@ -142,7 +143,14 @@ const TrendTemplates = () => {
                   {template.description}
                 </p>
                 <Button variant="outline" size="sm" className="w-full" asChild>
-                  <a href="#request-form">Use this trend</a>
+                  <Link
+                    to="/request"
+                    state={{
+                      presetVideoDescription: `Use the "${template.name}" trend for my brand`,
+                    }}
+                  >
+                    Use this trend
+                  </Link>
                 </Button>
               </div>
             </motion.div>

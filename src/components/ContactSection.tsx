@@ -1,8 +1,62 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 const ContactSection = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange =
+    (field: keyof typeof formValues) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormValues((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const payload = {
+      name: formValues.name,
+      email: formValues.email,
+      subject: formValues.subject,
+      message: formValues.message,
+      targetEmail: "demo.gap2025@gmail.com",
+    };
+
+    try {
+      const response = await fetch("https://formspree.io/f/xgolyeal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setFormValues({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+        toast.success("Your query has been submitted successfully.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
       {/* Background Glow */}
@@ -74,15 +128,19 @@ const ContactSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium">Name</label>
                   <input
                     id="name"
                     type="text"
+                    name="name"
                     className="w-full px-4 py-3 rounded-lg bg-background/50 border border-border/50 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-colors"
                     placeholder="Your name"
+                    value={formValues.name}
+                    onChange={handleChange("name")}
+                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -90,8 +148,12 @@ const ContactSection = () => {
                   <input
                     id="email"
                     type="email"
+                    name="email"
                     className="w-full px-4 py-3 rounded-lg bg-background/50 border border-border/50 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-colors"
                     placeholder="your@email.com"
+                    value={formValues.email}
+                    onChange={handleChange("email")}
+                    required
                   />
                 </div>
               </div>
@@ -100,8 +162,12 @@ const ContactSection = () => {
                 <input
                   id="subject"
                   type="text"
+                  name="subject"
                   className="w-full px-4 py-3 rounded-lg bg-background/50 border border-border/50 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-colors"
                   placeholder="How can we help?"
+                  value={formValues.subject}
+                  onChange={handleChange("subject")}
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -109,12 +175,16 @@ const ContactSection = () => {
                 <textarea
                   id="message"
                   rows={4}
+                  name="message"
                   className="w-full px-4 py-3 rounded-lg bg-background/50 border border-border/50 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-colors resize-none"
                   placeholder="Your message..."
+                  value={formValues.message}
+                  onChange={handleChange("message")}
+                  required
                 />
               </div>
-              <Button type="submit" variant="hero" className="w-full">
-                Send Message
+              <Button type="submit" variant="hero" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </motion.div>

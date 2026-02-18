@@ -1,25 +1,24 @@
-import { Button } from "@/components/ui/button";
-import { Sparkles, Instagram, MessageCircle } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     product: [
-      { name: "How It Works", href: "#how-it-works" },
-      { name: "Templates", href: "#templates" },
-      { name: "Pricing", href: "#pricing" },
-      { name: "FAQ", href: "#faq" },
+      { name: "How It Works", to: "/how-it-works" },
+      { name: "Templates", to: "/templates" },
+      { name: "Pricing", to: "/pricing" },
+      { name: "FAQ", to: "/faq" },
     ],
     company: [
-      { name: "About", href: "#" },
-      { name: "Contact", href: "#" },
-      { name: "Careers", href: "#" },
+      { name: "About", to: "/how-it-works" },
+      { name: "Contact", to: "/contact" },
+      { name: "Careers", to: "/contact" },
     ],
     legal: [
-      { name: "Terms of Service", href: "#" },
-      { name: "Privacy Policy", href: "#" },
-      { name: "Refund Policy", href: "#" },
+      { name: "Terms of Service", to: "/terms" },
+      { name: "Privacy Policy", to: "/privacy" },
     ],
   };
 
@@ -31,33 +30,16 @@ const Footer = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
             {/* Brand */}
             <div className="lg:col-span-2">
-              <a href="#" className="flex items-center gap-2 mb-4">
+              <Link to="/" className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg brand-gradient flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <span className="text-xl font-display font-bold text-white">Trendcraft</span>
-              </a>
+              </Link>
               <p className="text-pink-100/80 mb-6 max-w-sm">
                 AI-powered platform that transforms viral social media trends into
                 branded marketing videos for businesses.
               </p>
-              {/* Social Links */}
-              <div className="flex items-center gap-4">
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary/20 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center hover:bg-primary/20 transition-colors"
-                  aria-label="WhatsApp"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                </a>
-              </div>
             </div>
 
             {/* Product Links */}
@@ -66,12 +48,9 @@ const Footer = () => {
               <ul className="space-y-3">
                 {footerLinks.product.map((link) => (
                   <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-pink-100/70 hover:text-white transition-colors"
-                    >
+                    <Link to={link.to} className="text-pink-100/70 hover:text-white transition-colors">
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -83,12 +62,9 @@ const Footer = () => {
               <ul className="space-y-3">
                 {footerLinks.company.map((link) => (
                   <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-pink-100/70 hover:text-white transition-colors"
-                    >
+                    <Link to={link.to} className="text-pink-100/70 hover:text-white transition-colors">
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -100,12 +76,9 @@ const Footer = () => {
               <ul className="space-y-3">
                 {footerLinks.legal.map((link) => (
                   <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-pink-100/70 hover:text-white transition-colors"
-                    >
+                    <Link to={link.to} className="text-pink-100/70 hover:text-white transition-colors">
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
