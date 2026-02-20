@@ -178,7 +178,8 @@ const RequestForm = () => {
         "Creator (₹9,999/mo)": 9999,
         "Agency Pro (₹29,999/mo)": 29999,
       };
-      const baseAmountRupees = planToAmount[formData.plan] ?? 4999;
+      const selectedPlan = formData.plan || "Starter (₹4,999)";
+      const baseAmountRupees = planToAmount[selectedPlan] ?? 4999;
       const deliveryFeeRupees =
         formData.deliveryPreference === "express" ? 999 : 0;
       const totalAmountRupees = baseAmountRupees + deliveryFeeRupees;
@@ -190,8 +191,7 @@ const RequestForm = () => {
         currency: "INR",
         name: "Trendcraft",
         description:
-          formData.plan ||
-          "Trendcraft Plan",
+          selectedPlan,
         method: {
           card: true,
           upi: true,
@@ -207,36 +207,88 @@ const RequestForm = () => {
         },
         notes: {
           brandName: formData.brandName,
-          plan: formData.plan,
+          plan: selectedPlan,
           email: formData.email,
             request_id: requestId,
         },
         theme: { color: "#f31260" },
-        handler: async (_response: RazorpayResponse) => {
+        handler: async (response: RazorpayResponse) => {
           try {
             await supabase
               .from("requests")
               .update({ status: "paid" })
               .eq("id", requestId);
+
             try {
-              const { error: authError } = await supabase.auth.signInWithOtp({
-                email: formData.email,
-                options: {
-                  shouldCreateUser: true,
-                },
+              const paymentReference =
+                response.razorpay_payment_id || requestId;
+              const requestedAt = new Date().toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
               });
-              if (authError) {
-                console.error("Error sending payment confirmation email:", authError);
-                toast.error("Email could not be sent. Please check Supabase Auth email settings.");
+
+              const { error: fnError } = await supabase.functions.invoke(
+                "payment-confirmation-email",
+                {
+                  body: {
+                    email: formData.email,
+                    brandName: formData.brandName,
+                    plan: selectedPlan,
+                    amount: totalAmountRupees,
+                    requestId,
+                    paymentReference,
+                    paymentTime: requestedAt,
+                    selectedOption: selectedPlan,
+                  },
+                },
+              );
+
+              if (fnError) {
+                console.error(
+                  "Error sending payment confirmation email:",
+                  fnError,
+                );
+                toast.error(
+                  "Email could not be sent. Please check Supabase Auth email settings.",
+                );
               } else {
-                toast.success("Payment successful. A confirmation email has been sent.");
+                toast.success(
+                  "Payment successful. A confirmation email has been sent.",
+                );
               }
             } catch (emailError) {
-              console.error("Error sending payment confirmation email:", emailError);
-              toast.error("Email could not be sent. Please check Supabase Auth email settings.");
+              console.error(
+                "Error sending payment confirmation email:",
+                emailError,
+              );
+              toast.error(
+                "Email could not be sent. Please check Supabase Auth email settings.",
+              );
             }
+
+            setFormData({
+              videoDescription: "",
+              reelLink: "",
+              brandName: "",
+              industry: "",
+              tone: "",
+              offerCta: "",
+              plan: "",
+              deliveryPreference: "",
+              whatsapp: "",
+              email: "",
+              fileName: "",
+            });
+            setLogoFile(null);
           } catch (e) {
-            const msg = e instanceof Error ? e.message : "Failed to update payment status.";
+            const msg =
+              e instanceof Error
+                ? e.message
+                : "Failed to update payment status.";
             toast.error(msg);
           }
         },
@@ -249,22 +301,6 @@ const RequestForm = () => {
 
       openRazorpayCheckout(options);
       toast.success("Opening payment...");
-      
-      // Reset form after successful submission
-      setFormData({
-        videoDescription: "",
-        reelLink: "",
-        brandName: "",
-        industry: "",
-        tone: "",
-        offerCta: "",
-        plan: "",
-        deliveryPreference: "",
-        whatsapp: "",
-        email: "",
-        fileName: "",
-      });
-      setLogoFile(null);
     } catch (err) {
       console.error("Error submitting request:", err);
       const message = err instanceof Error ? err.message : "Failed to submit request. Please try again.";

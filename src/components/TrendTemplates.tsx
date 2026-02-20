@@ -21,49 +21,57 @@ type Template = {
 const templates: Template[] = [
   {
     name: "Skyfall Hook",
-    description: "Surreal freefall through the clouds for dramatic hooks and bold intros",
+    description:
+      "Gravity-defying fall shot that stops the scroll and sets up bold offers",
     video: video1,
     views: "9.8M",
   },
   {
     name: "Floating House Reveal",
-    description: "Cinematic floating house reveal for storytelling edits and big announcements",
+    description:
+      "Magical floating house reveal for storytelling promos and big brand announcements",
     video: video2,
     views: "7.2M",
   },
   {
     name: "Flying Car Launch",
-    description: "High-energy car launch in the sky for hype moments and viral reveals",
+    description:
+      "High-energy sky launch clip for hype drops, feature launches and viral reveals",
     video: video3,
     views: "8.4M",
   },
   {
     name: "Billboard Takeover",
-    description: "City billboard takeover shot perfect for product drops and brand reveals",
+    description:
+      "Mega-city billboard moment perfect for logo reveals, product drops and brand teasers",
     video: video4,
     views: "6.1M",
   },
   {
-    name: "Fountain Glow-Up",
-    description: "Satisfying fountain slow-motion for glow-ups, transformations and before/after edits",
+    name: "Storefront Splash Reveal",
+    description:
+      "Clean storefront and signage moment for local shops, cafés and hospitality promos",
     video: video5,
     views: "6.2M",
   },
   {
-    name: "Urban Motion Rush",
-    description: "Fast-paced urban motion clip ideal for transitions and energetic sequences",
+    name: "Supercar Drop Transition",
+    description:
+      "Cinematic supercar drop for luxury launches, event highlights and hero transitions",
     video: video6,
     views: "6.7M",
   },
   {
-    name: "Skyline Intro",
-    description: "Cinematic skyline moment for mood-setting intros, hooks or outros",
+    name: "Serum Swirl Spotlight",
+    description:
+      "Close-up product swirl shot ideal for skincare, beauty and D2C product hooks",
     video: video7,
     views: "2.5M",
   },
   {
-    name: "Street Reaction",
-    description: "Dynamic street-level shot perfect for reactions, overlays and commentary",
+    name: "Neon Smoke Impact",
+    description:
+      "Bold slow-motion smoke burst shot for dramatic logo reveals and punchy hooks",
     video: video8,
     views: "5.4M",
   },
@@ -113,7 +121,11 @@ const TrendTemplates = () => {
           className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {templates.map((template) => (
-            <motion.div key={template.name} variants={item}>
+            <motion.div
+              key={template.name}
+              variants={item}
+              className="flex flex-col h-full"
+            >
               <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
                 {template.video ? (
                   <video
@@ -137,12 +149,17 @@ const TrendTemplates = () => {
               </div>
 
               {/* Content */}
-              <div className="p-4">
+              <div className="p-4 flex flex-col flex-1">
                 <h3 className="font-display font-semibold mb-1">{template.name}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   {template.description}
                 </p>
-                <Button variant="outline" size="sm" className="w-full" asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-auto"
+                  asChild
+                >
                   <Link
                     to="/request"
                     state={{

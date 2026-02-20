@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 type DenoEnv = {
@@ -13,66 +15,119 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const FROM_EMAIL = Deno.env.get("PAYMENTS_FROM_EMAIL") ?? "payments@trendcraft.studio";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 Deno.serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return new Response("Method not allowed", {
+      status: 405,
+      headers: corsHeaders,
+    });
   }
 
   const body = await req.json().catch(() => null);
   if (!body) {
-    return new Response("Invalid JSON body", { status: 400 });
+    return new Response("Invalid JSON body", {
+      status: 400,
+      headers: corsHeaders,
+    });
   }
 
-  const { email, brandName, plan, amount, requestId } = body as {
+  const {
+    email,
+    brandName,
+    plan,
+    amount,
+    requestId,
+    paymentReference,
+    paymentTime,
+    selectedOption,
+  } = body as {
     email?: string;
     brandName?: string;
     plan?: string;
     amount?: number;
     requestId?: string;
+    paymentReference?: string;
+    paymentTime?: string;
+    selectedOption?: string;
   };
 
-  if (!email || !brandName || !plan || !amount || !requestId) {
-    return new Response("Missing required fields", { status: 400 });
+  if (!email || !paymentReference || !paymentTime || !selectedOption) {
+    return new Response("Missing required fields", {
+      status: 400,
+      headers: corsHeaders,
+    });
   }
 
-  const subject = "Trendcraft Payment Confirmation";
+  const metadata = {
+    paymentReference,
+    paymentTime,
+    selectedOption,
+    requestId: paymentReference,
+    requestedAt: paymentTime,
+    plan: selectedOption,
+  };
 
-  const textContent = [
-    `Hi ${brandName},`,
-    "",
-    "Thank you for your payment to Trendcraft.",
-    "",
-    `Order ID: ${requestId}`,
-    `Plan: ${plan}`,
-    `Amount: ₹${amount.toLocaleString("en-IN")}`,
-    "",
-    "We have received your payment and will start working on your custom video.",
-    "",
-    "If you have any questions, just reply to this email.",
-    "",
-    "– Trendcraft Team",
-  ].join("\n");
+  const { data: usersPage, error: listError } = await supabase.auth.admin.listUsers();
 
-  const htmlContent = `
-    <p>Hi ${brandName},</p>
-    <p>Thank you for your payment to <strong>Trendcraft</strong>.</p>
-    <p>
-      <strong>Order ID:</strong> ${requestId}<br />
-      <strong>Plan:</strong> ${plan}<br />
-      <strong>Amount:</strong> ₹${amount.toLocaleString("en-IN")}
-    </p>
-    <p>We have received your payment and will start working on your custom video.</p>
-    <p>If you have any questions, just reply to this email.</p>
-    <p>– Trendcraft Team</p>
-  `;
+  if (listError || !usersPage) {
+    console.error("Failed to list users for payment email:", listError);
+    return new Response("Failed to prepare confirmation email", {
+      status: 500,
+      headers: corsHeaders,
+    });
+  }
+
+  const existingUser = usersPage.users.find((user: { email?: string | null }) =>
+    user.email && user.email.toLowerCase() === email.toLowerCase(),
+  );
+
+  if (existingUser) {
+    const { error: updateError } = await supabase.auth.admin.updateUserById(
+      existingUser.id,
+      { user_metadata: metadata },
+    );
+    if (updateError) {
+      console.error(
+        "Failed to update user metadata for payment email:",
+        updateError,
+      );
+      return new Response("Failed to prepare confirmation email", {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
+  } else {
+    const { error: createError } = await supabase.auth.admin.createUser({
+      email,
+      user_metadata: metadata,
+    });
+    if (createError) {
+      console.error("Failed to create user for payment email:", createError);
+      return new Response("Failed to prepare confirmation email", {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
+  }
 
   console.log("Triggering auth magic-link email as payment confirmation", {
     email,
-    requestId,
-    plan,
-    amount,
+    paymentReference,
+    paymentTime,
+    selectedOption,
   });
 
   const { error } = await supabase.auth.signInWithOtp({
@@ -84,11 +139,14 @@ Deno.serve(async (req: Request) => {
 
   if (error) {
     console.error("Auth email send failed:", error);
-    return new Response("Failed to send confirmation email", { status: 500 });
+    return new Response("Failed to send confirmation email", {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
-    headers: { "Content-Type": "application/json" },
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
