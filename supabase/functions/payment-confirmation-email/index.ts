@@ -16,7 +16,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "
 const FROM_EMAIL = Deno.env.get("PAYMENTS_FROM_EMAIL") ?? "payments@trendcraft.studio";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": Deno.env.get("ALLOWED_ORIGIN") ?? "https://yourdomain.com",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -124,7 +124,7 @@ Deno.serve(async (req: Request) => {
   }
 
   console.log("Triggering auth magic-link email as payment confirmation", {
-    email,
+    email: email.replace(/(.{2})(.*)(@.*)/, "$1***$3"),
     paymentReference,
     paymentTime,
     selectedOption,

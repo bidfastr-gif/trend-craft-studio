@@ -20,7 +20,7 @@ const TermsOfServicePage = () => {
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 How Trendcraft works with your brand, assets and payments when creating
-                custom trend videos.
+                custom trending videos.
               </p>
             </div>
             <div className="glass-card rounded-2xl p-6 sm:p-8 lg:p-10 space-y-8 text-sm sm:text-base text-muted-foreground">

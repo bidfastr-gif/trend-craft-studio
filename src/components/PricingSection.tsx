@@ -10,7 +10,7 @@ const plans = [
     description: "Perfect for trying out Trendcraft",
     icon: Zap,
     features: [
-      "1 trend video",
+      "1 trending video",
       "48-hour delivery",
       "HD quality output",
       "2 revision included",
@@ -25,7 +25,7 @@ const plans = [
     description: "For regular content creators and brands",
     icon: Star,
     features: [
-      "10 trend videos/month",
+      "10 trending videos/month",
       "Priority queue",
       "24-hour delivery",
       "4K quality output",
@@ -42,7 +42,7 @@ const plans = [
     description: "For agencies managing multiple brands",
     icon: Building2,
     features: [
-      "Unlimited trend videos",
+      "Unlimited trending videos",
       "Custom brand scenes",
       "Express 12-hour delivery",
       "4K + vertical formats",

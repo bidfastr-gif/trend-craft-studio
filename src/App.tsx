@@ -7,6 +7,7 @@ import ScrollToAnchor from "./components/ScrollToAnchor";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import HowItWorksPage from "./pages/HowItWorksPage";
+import HowItWorksVideoPage from "./pages/HowItWorksVideoPage";
 import TemplatesPage from "./pages/TemplatesPage";
 import PricingPage from "./pages/PricingPage";
 import FAQPage from "./pages/FAQPage";
@@ -27,6 +28,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/how-it-works-video" element={<HowItWorksVideoPage />} />
           <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/faq" element={<FAQPage />} />

@@ -12,7 +12,7 @@ const Footer = () => {
       { name: "FAQ", to: "/faq" },
     ],
     company: [
-      { name: "About", to: "/how-it-works" },
+      { name: "About", to: "/" },
       { name: "Contact", to: "/contact" },
       { name: "Careers", to: "/contact" },
     ],

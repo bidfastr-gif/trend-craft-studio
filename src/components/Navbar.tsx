@@ -43,7 +43,7 @@ const Navbar = () => {
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
             <Button variant="hero" size="default" asChild>
-              <a href="/request">Create My Trend Video</a>
+              <a href="/request">Create My Trending Video</a>
             </Button>
           </div>
 
@@ -71,7 +71,7 @@ const Navbar = () => {
                 </a>
               ))}
               <Button variant="hero" size="default" asChild>
-                <a href="/request">Create My Trend Video</a>
+                <a href="/request">Create My Trending Video</a>
               </Button>
             </div>
           </div>

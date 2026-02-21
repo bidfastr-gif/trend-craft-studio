@@ -14,7 +14,7 @@ const CTASection = () => {
           </p>
           <Button variant="hero" size="xl" className="text-black font-bold" asChild>
             <a href="#request-form">
-              Create My Trend Video
+              Create My Trending Video
               <Sparkles className="w-5 h-5" />
             </a>
           </Button>

@@ -30,7 +30,7 @@ const HeroSection = () => {
           >
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">
-              Viral Trend Video Service
+              Viral Trending Video
             </span>
           </motion.div>
 
@@ -53,7 +53,7 @@ const HeroSection = () => {
             Stop chasing trends—start owning them. We transform viral moments into high-converting branded content, delivered straight to your WhatsApp in 24 hours.
           </motion.p>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -61,12 +61,12 @@ const HeroSection = () => {
           >
             <Button variant="hero" size="xl" asChild>
               <a href="/request">
-                Create My Trend Video
+                Create My Trending Video
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>
             <Button variant="heroOutline" size="xl" asChild>
-              <a href="/how-it-works">
+              <a href="/how-it-works-video">
                 <Play className="w-5 h-5" />
                 See How It Works
               </a>
