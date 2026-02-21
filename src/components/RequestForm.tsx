@@ -178,10 +178,10 @@ const RequestForm = () => {
         "Creator (₹9,999/mo)": 9999,
         "Agency Pro (₹29,999/mo)": 29999,
       };
-
       const baseAmountRupees = planToAmount[formData.plan];
       if (baseAmountRupees === undefined) {
         toast.error("Invalid plan selected. Please refresh and try again.");
+        setIsSubmitting(false);
         return;
       }
 

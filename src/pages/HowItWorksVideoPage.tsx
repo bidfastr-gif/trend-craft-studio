@@ -65,6 +65,7 @@ const HowItWorksVideoPage = () => {
                 ref={videoRef}
                 src={howItWorksVideo}
                 className="w-full h-full object-cover"
+                playsInline
                 onClick={handleVideoClick}
                 onEnded={() => {
                   setIsPlaying(false);
