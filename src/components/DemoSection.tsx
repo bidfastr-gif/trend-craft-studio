@@ -128,7 +128,7 @@ const DemoSection = () => {
               {/* Caption */}
               <div className="px-2 pb-2">
                 <p className="text-sm">
-                  <span className="font-semibold">yourbrand_official</span>{" "}
+                  <span className="font-semibold">potatowala_official</span>{" "}
                   Turn any viral trend into a branded video for your business ✨
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
