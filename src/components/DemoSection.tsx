@@ -20,8 +20,8 @@ const DemoSection = () => {
         {/* Demo Comparison */}
         <div className="flex flex-col lg:flex-row items-start justify-center gap-8 lg:gap-12">
           {/* Before - Instagram Mockup */}
-          <div className="relative flex flex-col items-center">
-            <div className="glass-card p-3 rounded-3xl max-w-xs">
+          <div className="relative flex flex-col items-center w-full max-w-xs">
+            <div className="glass-card p-3 rounded-3xl w-full">
               {/* Instagram Header */}
               <div className="flex items-center gap-3 mb-3 px-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600" />
@@ -78,8 +78,8 @@ const DemoSection = () => {
           </div>
 
           {/* After - Branded Instagram Mockup */}
-          <div className="relative flex flex-col items-center">
-            <div className="glass-card p-3 rounded-3xl max-w-xs border-primary/30">
+          <div className="relative flex flex-col items-center w-full max-w-xs">
+            <div className="glass-card p-3 rounded-3xl w-full border-primary/30">
               {/* Instagram Header */}
               <div className="flex items-center gap-3 mb-3 px-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">

@@ -10,8 +10,8 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <img
           src={heroBg}
-          alt="Trendcraft hero background"
-          title="Trendcraft hero background"
+          alt=""
+          role="presentation"
           width={1920}
           height={1080}
           className="w-full h-full object-cover opacity-40"
