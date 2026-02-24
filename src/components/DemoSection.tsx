@@ -87,6 +87,10 @@ const DemoSection = () => {
                     <img
                       src={PotatowalaLogo}
                       alt="Potatowala logo"
+                      title="Potatowala logo"
+                      width={225}
+                      height={225}
+                      loading="lazy"
                       className="w-6 h-6 object-contain"
                     />
                   </div>
@@ -110,6 +114,10 @@ const DemoSection = () => {
                   <img
                     src={PotatowalaLogo}
                     alt="Potatowala logo"
+                    title="Potatowala logo"
+                    width={225}
+                    height={225}
+                    loading="lazy"
                     className="w-9 h-9 object-contain"
                   />
                 </div>

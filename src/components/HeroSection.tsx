@@ -10,15 +10,18 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <img
           src={heroBg}
-          alt=""
+          alt="Trendcraft hero background"
+          title="Trendcraft hero background"
+          width={1920}
+          height={1080}
           className="w-full h-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-background/20" />
       </div>
 
       {/* Glow Effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+      <div className="absolute top-1/4 left-0 md:left-1/4 w-48 h-48 md:w-96 md:h-96 bg-primary/20 rounded-full blur-[80px] md:blur-[120px] animate-pulse" />
+      <div className="absolute bottom-1/4 right-0 md:right-1/4 w-48 h-48 md:w-96 md:h-96 bg-accent/20 rounded-full blur-[80px] md:blur-[120px] animate-pulse delay-1000" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
