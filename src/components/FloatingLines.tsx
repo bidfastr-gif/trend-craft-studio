@@ -424,18 +424,17 @@ export default function FloatingLines({
       targetInfluenceRef.current = 1.0;
 
       if (parallax) {
-        // Use window dimensions for parallax if triggerElement is window
-        const width = triggerElement === 'window' ? window.innerWidth : rect.width;
-        const height = triggerElement === 'window' ? window.innerHeight : rect.height;
+        let offsetX: number;
+        let offsetY: number;
         
-        const centerX = width / 2;
-        const centerY = height / 2;
-        
-        // For window trigger, use client coordinates directly if rect is not relevant
-        // But since we are full screen, rect.width should match window.innerWidth
-        
-        const offsetX = (x - centerX) / width;
-        const offsetY = -(y - centerY) / height;
+        if (triggerElement === 'window') {
+          // Use event client coordinates for window-based trigger
+          offsetX = (x - window.innerWidth / 2) / window.innerWidth;
+          offsetY = -(y - window.innerHeight / 2) / window.innerHeight;
+        } else {
+          offsetX = (x - rect.width / 2) / rect.width;
+          offsetY = -(y - rect.height / 2) / rect.height;
+        }
         targetParallaxRef.current.set(offsetX * parallaxStrength, offsetY * parallaxStrength);
       }
     };
