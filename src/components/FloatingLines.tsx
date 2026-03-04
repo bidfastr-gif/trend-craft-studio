@@ -415,7 +415,6 @@ export default function FloatingLines({
     }
 
     const handlePointerMove = (event: PointerEvent) => {
-      // @ts-ignore
       const rect = renderer.domElement.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
@@ -450,10 +449,8 @@ export default function FloatingLines({
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerleave', handlePointerLeave);
       } else {
-        // @ts-ignore
-        renderer.domElement.addEventListener('pointermove', handlePointerMove);
-        // @ts-ignore
-        renderer.domElement.addEventListener('pointerleave', handlePointerLeave);
+        renderer.domElement.addEventListener('pointermove', handlePointerMove as unknown as EventListener);
+        renderer.domElement.addEventListener('pointerleave', handlePointerLeave as unknown as EventListener);
       }
     }
 
@@ -486,10 +483,13 @@ export default function FloatingLines({
       }
 
       if (interactive) {
-        // @ts-ignore
-        renderer.domElement.removeEventListener('pointermove', handlePointerMove);
-        // @ts-ignore
-        renderer.domElement.removeEventListener('pointerleave', handlePointerLeave);
+        if (triggerElement === 'window') {
+          window.removeEventListener('pointermove', handlePointerMove as unknown as EventListener);
+          window.removeEventListener('pointerleave', handlePointerLeave as unknown as EventListener);
+        } else {
+          renderer.domElement.removeEventListener('pointermove', handlePointerMove as unknown as EventListener);
+          renderer.domElement.removeEventListener('pointerleave', handlePointerLeave as unknown as EventListener);
+        }
       }
 
       geometry.dispose();
