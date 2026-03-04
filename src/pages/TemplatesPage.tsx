@@ -6,7 +6,7 @@ const TemplatesPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main>
+      <main className="pt-24 lg:pt-32">
         <TrendTemplates />
       </main>
       <Footer />

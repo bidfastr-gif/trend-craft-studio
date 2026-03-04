@@ -18,7 +18,7 @@ const DemoSection = () => {
         </div>
 
         {/* Demo Comparison */}
-        <div className="flex flex-col lg:flex-row items-start justify-center gap-8 lg:gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
           {/* Before - Instagram Mockup */}
           <div className="relative flex flex-col items-center w-full max-w-xs">
             <div className="glass-card p-3 rounded-3xl w-full">

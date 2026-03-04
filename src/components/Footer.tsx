@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import Logo from "@/assets/-Logo-.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -31,10 +32,7 @@ const Footer = () => {
             {/* Brand */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg brand-gradient flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-display font-bold text-white">Trendcraft</span>
+                <img src={Logo} alt="Viral Reels" className="h-16 lg:h-24 w-auto object-contain" />
               </Link>
               <p className="text-pink-100/80 mb-6 max-w-sm">
                 AI-powered platform that transforms viral social media trends into
@@ -91,7 +89,7 @@ const Footer = () => {
       <div className="relative z-10 border-t border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-pink-100/60">
-            © {currentYear} Trendcraft. All rights reserved.
+            © {currentYear} Viral Reels. All rights reserved.
           </p>
         </div>
       </div>

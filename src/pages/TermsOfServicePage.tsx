@@ -6,7 +6,7 @@ const TermsOfServicePage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main>
+      <main className="pt-24 lg:pt-32">
         <section className="py-24 lg:py-32 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-accent/5" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl relative z-10">
@@ -19,7 +19,7 @@ const TermsOfServicePage = () => {
                 Terms of Service
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                How Trendcraft works with your brand, assets and payments when creating
+                How Viral Reels works with your brand, assets and payments when creating
                 custom trending videos.
               </p>
             </div>
@@ -29,7 +29,7 @@ const TermsOfServicePage = () => {
                   1. Service Scope
                 </h2>
                 <p>
-                  Trendcraft creates short-form marketing videos based on the brief,
+                  Viral Reels creates short-form marketing videos based on the brief,
                   trend selection and brand assets you provide. We do not guarantee
                   specific performance metrics such as views, engagement or sales.
                 </p>
@@ -70,7 +70,7 @@ const TermsOfServicePage = () => {
                 </h2>
                 <p>
                   Once delivered, you are free to use the final video across your brand
-                  channels. Trendcraft may showcase non-sensitive work samples in its
+                  channels. Viral Reels may showcase non-sensitive work samples in its
                   portfolio unless you request otherwise in advance.
                 </p>
               </div>

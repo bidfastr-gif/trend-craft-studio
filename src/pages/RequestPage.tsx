@@ -6,7 +6,7 @@ const RequestPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main className="pt-20">
+      <main className="pt-24 lg:pt-32">
         <RequestForm />
       </main>
       <Footer />

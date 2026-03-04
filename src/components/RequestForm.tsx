@@ -73,7 +73,18 @@ const RequestForm = () => {
   }, [presetVideoDescription]);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const newState = { ...prev, [field]: value };
+      
+      if (field === "plan") {
+        if (value.startsWith("Starter")) {
+          newState.deliveryPreference = "";
+        } else {
+          newState.deliveryPreference = "included";
+        }
+      }
+      return newState;
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,7 +205,7 @@ const RequestForm = () => {
         key: keyId,
         amount: amountPaise.toString(),
         currency: "INR",
-        name: "Trendcraft",
+        name: "Viral Reels",
         description: formData.plan || "Trending video order",
         method: {
           card: true,
@@ -207,7 +218,7 @@ const RequestForm = () => {
         prefill: {
           name: formData.brandName || "Customer",
           email: formData.email,
-          contact: formData.whatsapp,
+          contact: formData.whatsapp.replace(/\D/g, ""),
         },
         theme: { color: "#f31260" },
         handler: async (response: RazorpayResponse) => {
@@ -216,6 +227,23 @@ const RequestForm = () => {
               .from("requests")
               .update({ status: "paid" })
               .eq("id", requestId);
+
+            try {
+              await supabase.functions.invoke("payment-confirmation-email", {
+                body: {
+                  email: formData.email,
+                  brandName: formData.brandName,
+                  plan: formData.plan,
+                  amount: amountPaise / 100,
+                  requestId: requestId,
+                  paymentReference: response.razorpay_payment_id,
+                  paymentTime: new Date().toISOString(),
+                  selectedOption: formData.plan,
+                },
+              });
+            } catch (emailError) {
+              console.error("Failed to send confirmation email:", emailError);
+            }
 
             toast.success(
               "Payment successful. We’ve received your request and will start editing.",
@@ -337,7 +365,11 @@ const RequestForm = () => {
                 {/* Industry */}
                 <div className="space-y-2">
                   <Label>Industry *</Label>
-                  <Select required onValueChange={(val) => handleInputChange("industry", val)}>
+                  <Select
+                    required
+                    value={formData.industry}
+                    onValueChange={(val) => handleInputChange("industry", val)}
+                  >
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select industry" />
                     </SelectTrigger>
@@ -354,7 +386,11 @@ const RequestForm = () => {
                 {/* Tone */}
                 <div className="space-y-2">
                   <Label>Tone *</Label>
-                  <Select required onValueChange={(val) => handleInputChange("tone", val)}>
+                  <Select
+                    required
+                    value={formData.tone}
+                    onValueChange={(val) => handleInputChange("tone", val)}
+                  >
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select tone" />
                     </SelectTrigger>
@@ -411,7 +447,11 @@ const RequestForm = () => {
                 {/* Choose Plan */}
                 <div className="space-y-2">
                   <Label>Choose Plan *</Label>
-                  <Select required onValueChange={(val) => handleInputChange("plan", val)}>
+                  <Select
+                    required
+                    value={formData.plan}
+                    onValueChange={(val) => handleInputChange("plan", val)}
+                  >
                     <SelectTrigger className="bg-secondary/50">
                       <SelectValue placeholder="Select plan" />
                     </SelectTrigger>
@@ -426,20 +466,30 @@ const RequestForm = () => {
                 </div>
 
                 {/* Delivery Preference */}
-                <div className="space-y-2">
-                  <Label>Delivery Preference *</Label>
-                  <Select required onValueChange={(val) => handleInputChange("deliveryPreference", val)}>
-                    <SelectTrigger className="bg-secondary/50">
-                      <SelectValue placeholder="Select delivery time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="standard">Standard (48 hours)</SelectItem>
-                      <SelectItem value="express">
-                        Express (24 hours) +₹999
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {formData.plan.startsWith("Starter") && (
+                  <div className="space-y-2">
+                    <Label>Delivery Preference *</Label>
+                    <Select
+                      required
+                      value={formData.deliveryPreference}
+                      onValueChange={(val) =>
+                        handleInputChange("deliveryPreference", val)
+                      }
+                    >
+                      <SelectTrigger className="bg-secondary/50">
+                        <SelectValue placeholder="Select delivery time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="standard">
+                          Standard (48 hours)
+                        </SelectItem>
+                        <SelectItem value="express">
+                          Express (24 hours) +₹999
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
 
               {/* Contact Info */}

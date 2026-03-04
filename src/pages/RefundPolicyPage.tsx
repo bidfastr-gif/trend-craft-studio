@@ -19,7 +19,7 @@ const RefundPolicyPage = () => {
                 Refund Policy
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                When refunds may be available for Trendcraft orders and how to reach us
+                When refunds may be available for Viral Reels orders and how to reach us
                 if something goes wrong.
               </p>
             </div>
@@ -29,7 +29,7 @@ const RefundPolicyPage = () => {
                   1. Eligibility
                 </h2>
                 <p>
-                  Because Trendcraft creates custom videos tailored to your brand,
+                  Because Viral Reels creates custom videos tailored to your brand,
                   refunds are generally not available once work has started. Exceptions
                   may be made if we are unable to deliver the video as agreed.
                 </p>

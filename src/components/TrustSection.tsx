@@ -25,13 +25,13 @@ const useCases = [
 
 const testimonials = [
   {
-    quote: "Trendcraft helped us go viral with the penguin trend. Our spa bookings increased by 300%!",
+    quote: "Viral Reels helped us go viral with the penguin trend. Our spa bookings increased by 300%!",
     author: "Priya Sharma",
     role: "Marketing Head, Zen Spa",
     avatar: "PS",
   },
   {
-    quote: "We use Trendcraft for all our D2C clients. The turnaround time is incredible.",
+    quote: "We use Viral Reels for all our D2C clients. The turnaround time is incredible.",
     author: "Rahul Mehta",
     role: "Founder, Viral Agency",
     avatar: "RM",
@@ -54,7 +54,7 @@ const TrustSection = () => {
             Built For <span className="gradient-text">Everyone</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From solo creators to enterprise agencies, Trendcraft fits your workflow
+            From solo creators to enterprise agencies, Viral Reels fits your workflow
           </p>
         </div>
 

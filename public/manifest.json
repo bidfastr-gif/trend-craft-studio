@@ -1,0 +1,15 @@
+{
+  "short_name": "Viral Reels",
+  "name": "Viral Reels - Turn Viral Trends Into Brand Videos",
+  "icons": [
+    {
+      "src": "/src/assets/Logo_no_text.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

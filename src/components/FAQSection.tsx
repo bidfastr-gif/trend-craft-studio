@@ -24,7 +24,7 @@ const faqs = [
   {
     question: "Can agencies resell videos?",
     answer:
-      "Yes! Our Agency Pro plan includes white-label options. You can resell the videos to your clients without any Trendcraft branding.",
+      "Yes! Our Agency Pro plan includes white-label options. You can resell the videos to your clients without any Viral Reels branding.",
   },
   {
     question: "Is this AI-generated or edited manually?",
@@ -53,7 +53,7 @@ const FAQSection = () => {
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know about Trendcraft
+            Everything you need to know about Viral Reels
           </p>
         </div>
 

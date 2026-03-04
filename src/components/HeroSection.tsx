@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 lg:pt-32">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
@@ -95,7 +95,7 @@ const HeroSection = () => {
             </div>
             <div className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">500+</span> brands
-              dominating social media with Trendcraft
+              dominating social media with Viral Reels
             </div>
           </motion.div>
         </div>

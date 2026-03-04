@@ -6,7 +6,7 @@ const PrivacyPolicyPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main>
+      <main className="pt-24 lg:pt-32">
         <section className="py-24 lg:py-32 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-accent/5" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl relative z-10">
@@ -19,7 +19,7 @@ const PrivacyPolicyPage = () => {
                 Privacy Policy
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                How Trendcraft collects, uses and protects the information you share
+                How Viral Reels collects, uses and protects the information you share
                 while ordering branded videos.
               </p>
             </div>

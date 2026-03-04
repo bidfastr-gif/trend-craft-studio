@@ -10,7 +10,7 @@ const CTASection = () => {
             Ready to Go <span className="gradient-text">Viral</span>?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Join 500+ brands creating trend-based content with Trendcraft
+            Join 500+ brands creating trend-based content with Viral Reels
           </p>
           <Button variant="hero" size="xl" className="text-black font-bold" asChild>
             <a href="#request-form">

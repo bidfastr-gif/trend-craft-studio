@@ -50,7 +50,7 @@ const HowItWorksVideoPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4">
-              See How Trendcraft Works
+              See How Viral Reels Works
             </h1>
             <p className="text-muted-foreground mb-10 max-w-2xl mx-auto">
               Watch this short walkthrough to understand how your request form, payment
