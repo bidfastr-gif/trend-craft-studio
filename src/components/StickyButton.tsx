@@ -10,7 +10,7 @@ const StickyButton = () => {
         className="rounded-full shadow-[0_0_30px_hsl(262_83%_58%/0.5)]"
         asChild
       >
-        <a href="#request-form">
+        <a href="/request">
           <Sparkles className="w-5 h-5" />
           Create Video
         </a>

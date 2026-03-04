@@ -13,7 +13,7 @@ const CTASection = () => {
             Join 500+ brands creating trend-based content with Viral Reels
           </p>
           <Button variant="hero" size="xl" className="text-black font-bold" asChild>
-            <a href="#request-form">
+            <a href="/request">
               Create My Trending Video
               <Sparkles className="w-5 h-5" />
             </a>

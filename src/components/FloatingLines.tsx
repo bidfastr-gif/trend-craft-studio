@@ -429,8 +429,8 @@ export default function FloatingLines({
         
         if (triggerElement === 'window') {
           // Use event client coordinates for window-based trigger
-          offsetX = (x - window.innerWidth / 2) / window.innerWidth;
-          offsetY = -(y - window.innerHeight / 2) / window.innerHeight;
+          offsetX = (event.clientX - window.innerWidth / 2) / window.innerWidth;
+          offsetY = -(event.clientY - window.innerHeight / 2) / window.innerHeight;
         } else {
           offsetX = (x - rect.width / 2) / rect.width;
           offsetY = -(y - rect.height / 2) / rect.height;
