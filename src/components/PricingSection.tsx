@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 const plans = [
   {
     name: "Starter",
-    price: "₹4,999",
+    price: "$49",
+    originalPrice: "$99",
     period: "one-time",
     description: "Perfect for trying out Viral Reels",
     icon: Zap,
@@ -16,8 +17,9 @@ const plans = [
       "2 revision included",
     ],
     cta: "Start Now",
-    popular: false,
+    popular: true,
   },
+  /*
   {
     name: "Creator",
     price: "₹9,999",
@@ -52,6 +54,7 @@ const plans = [
     cta: "Start Now",
     popular: false,
   },
+  */
 ];
 
 const container = {
@@ -97,26 +100,26 @@ const PricingSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          className="flex justify-center flex-wrap gap-8 max-w-6xl mx-auto"
         >
           {plans.map((plan) => (
             <motion.div
               key={plan.name}
               variants={item}
-              className={`relative glass-card rounded-2xl p-8 transition-all duration-300 hover:border-primary/50 flex flex-col h-full ${
+              className={`relative glass-card rounded-2xl p-8 transition-all duration-300 hover:border-primary/50 flex flex-col h-full w-full md:w-[350px] ${
                 plan.popular
                   ? "border-[#39ff14] shadow-[0_0_40px_#39ff14]"
                   : ""
               }`}
             >
               {/* Popular Badge */}
-              {plan.popular && (
+              {/* {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <div className="px-4 py-1.5 rounded-full bg-[#39ff14] text-sm font-semibold text-black">
                     Most Popular
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Icon */}
               <div
@@ -137,7 +140,13 @@ const PricingSection = () => {
               <h3 className="text-xl font-display font-semibold mb-2">
                 {plan.name}
               </h3>
-              <div className="flex items-baseline gap-1 mb-2">
+              <div className="flex items-baseline gap-2 mb-2">
+                {plan.originalPrice && (
+                  <span className="text-3xl text-gray-300 relative font-medium">
+                    {plan.originalPrice}
+                    <span className="absolute left-0 top-1/2 w-full h-[2px] bg-red-600 -rotate-12 transform -translate-y-1/2 scale-110" />
+                  </span>
+                )}
                 <span className="text-4xl font-display font-bold">{plan.price}</span>
                 <span className="text-muted-foreground">/{plan.period}</span>
               </div>

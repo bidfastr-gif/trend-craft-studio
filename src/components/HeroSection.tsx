@@ -50,7 +50,7 @@ const HeroSection = () => {
           >
             <Button variant="hero" size="xl" asChild>
               <a href="/request">
-                Create My Trending Video
+                Create My Viral Video
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>

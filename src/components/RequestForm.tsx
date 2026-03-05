@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Send, Sparkles, CreditCard } from "lucide-react";
+import { Upload, Send, Sparkles, CreditCard, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -32,12 +32,20 @@ const industries = [
   "Other",
 ];
 
-const tones = ["Funny", "Premium", "Cute", "Bold", "Emotional"];
+const formats = [
+  "YouTube (16:9)",
+  "YouTube Shorts (9:16)",
+  "Instagram (9:16)",
+  "Facebook (9:16)",
+  "TikTok (9:16)",
+];
+
+const videoLengths = ["15s", "30s", "45s"];
 
 const plans = [
-  "Starter (₹4,999)",
-  "Creator (₹9,999/mo)",
-  "Agency Pro (₹29,999/mo)",
+  "Test Plan ($1)",
+  "Starter ($49)",
+  "Creator (coming soon)",
 ];
 
 const RequestForm = () => {
@@ -47,6 +55,7 @@ const RequestForm = () => {
       ?.presetVideoDescription ?? "";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
 
   const [formData, setFormData] = useState({
@@ -54,7 +63,8 @@ const RequestForm = () => {
     reelLink: "",
     brandName: "",
     industry: "",
-    tone: "",
+    format: "",
+    videoLength: "",
     offerCta: "",
     plan: "",
     deliveryPreference: "",
@@ -104,6 +114,14 @@ const RequestForm = () => {
       let logoPath: string | null = null;
       let logoUrl: string | null = null;
 
+      const videoDescriptionWithMeta = [
+        formData.format && `Format: ${formData.format}`,
+        formData.videoLength && `Video Length: ${formData.videoLength}`,
+        formData.videoDescription,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+
       const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
       if (!keyId) {
         toast.error("Razorpay key not configured.");
@@ -140,17 +158,18 @@ const RequestForm = () => {
       const { error } = await supabase.from("requests").insert([
         {
           id: requestId,
-          video_description: formData.videoDescription,
+          video_description: videoDescriptionWithMeta,
           reel_link: formData.reelLink,
           brand_name: formData.brandName,
           industry: formData.industry,
-          tone: formData.tone,
           logo_filename: logoUrl || logoPath || formData.fileName,
           offer_cta: formData.offerCta,
           plan: formData.plan,
           delivery_preference: formData.deliveryPreference,
           whatsapp: formData.whatsapp,
           email: formData.email,
+          format: formData.format,
+          video_length: formData.videoLength,
           status: "pending_payment", // Initial status
         }
       ]);
@@ -166,11 +185,12 @@ const RequestForm = () => {
           },
           body: JSON.stringify({
             requestId,
-            videoDescription: formData.videoDescription,
+            videoDescription: videoDescriptionWithMeta,
+            format: formData.format,
+            videoLength: formData.videoLength,
             reelLink: formData.reelLink,
             brandName: formData.brandName,
             industry: formData.industry,
-            tone: formData.tone,
             offerCta: formData.offerCta,
             plan: formData.plan,
             deliveryPreference: formData.deliveryPreference,
@@ -185,26 +205,25 @@ const RequestForm = () => {
       }
 
       const planToAmount: Record<string, number> = {
-        "Starter (₹4,999)": 4999,
-        "Creator (₹9,999/mo)": 9999,
-        "Agency Pro (₹29,999/mo)": 29999,
+        "Test Plan ($1)": 1,
+        "Starter ($49)": 49,
       };
-      const baseAmountRupees = planToAmount[formData.plan];
-      if (baseAmountRupees === undefined) {
+      const baseAmount = planToAmount[formData.plan];
+      if (baseAmount === undefined) {
         toast.error("Invalid plan selected. Please refresh and try again.");
         setIsSubmitting(false);
         return;
       }
 
-      const deliveryFeeRupees =
-        formData.deliveryPreference === "express" ? 999 : 0;
-      const totalAmountRupees = baseAmountRupees + deliveryFeeRupees;
-      const amountPaise = totalAmountRupees * 100;
+      const deliveryFee =
+        formData.deliveryPreference === "express" ? 19 : 0;
+      const totalAmount = baseAmount + deliveryFee;
+      const amountSubunits = totalAmount * 100;
 
       const options: RazorpayOptions = {
         key: keyId,
-        amount: amountPaise.toString(),
-        currency: "INR",
+        amount: amountSubunits.toString(),
+        currency: "USD",
         name: "Viral Reels",
         description: formData.plan || "Trending video order",
         method: {
@@ -223,10 +242,44 @@ const RequestForm = () => {
         theme: { color: "#f31260" },
         handler: async (response: RazorpayResponse) => {
           try {
-            await supabase
+            // 1. Update Supabase
+            const { error: updateError } = await supabase
               .from("requests")
               .update({ status: "paid" })
               .eq("id", requestId);
+
+            if (updateError) throw updateError;
+
+            // 2. Send to Formspree
+            try {
+              await fetch("https://formspree.io/f/xgolyeal", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({
+                  requestId,
+                  paymentStatus: "PAID",
+                  paymentId: response.razorpay_payment_id,
+                  videoDescription: videoDescriptionWithMeta,
+                  format: formData.format,
+                  videoLength: formData.videoLength,
+                  reelLink: formData.reelLink,
+                  brandName: formData.brandName,
+                  industry: formData.industry,
+                  offerCta: formData.offerCta,
+                  plan: formData.plan,
+                  deliveryPreference: formData.deliveryPreference,
+                  whatsapp: formData.whatsapp,
+                  email: formData.email,
+                  logoUrl: logoUrl,
+                  amount: amountSubunits / 100,
+                }),
+              });
+            } catch (formspreeErr) {
+              console.error("Error sending paid status to Formspree:", formspreeErr);
+            }
 
             try {
               await supabase.functions.invoke("payment-confirmation-email", {
@@ -234,7 +287,7 @@ const RequestForm = () => {
                   email: formData.email,
                   brandName: formData.brandName,
                   plan: formData.plan,
-                  amount: amountPaise / 100,
+                  amount: amountSubunits / 100,
                   requestId: requestId,
                   paymentReference: response.razorpay_payment_id,
                   paymentTime: new Date().toISOString(),
@@ -245,16 +298,15 @@ const RequestForm = () => {
               console.error("Failed to send confirmation email:", emailError);
             }
 
-            toast.success(
-              "Payment successful. We’ve received your request and will start editing.",
-            );
+            setShowSuccessPopup(true);
 
             setFormData({
               videoDescription: "",
               reelLink: "",
               brandName: "",
               industry: "",
-              tone: "",
+              format: "",
+              videoLength: "",
               offerCta: "",
               plan: "",
               deliveryPreference: "",
@@ -383,26 +435,48 @@ const RequestForm = () => {
                   </Select>
                 </div>
 
-                {/* Tone */}
+                {/* Format */}
                 <div className="space-y-2">
-                  <Label>Tone *</Label>
+                  <Label>Format *</Label>
                   <Select
                     required
-                    value={formData.tone}
-                    onValueChange={(val) => handleInputChange("tone", val)}
+                    value={formData.format}
+                    onValueChange={(val) => handleInputChange("format", val)}
                   >
                     <SelectTrigger className="bg-secondary/50">
-                      <SelectValue placeholder="Select tone" />
+                      <SelectValue placeholder="Select format" />
                     </SelectTrigger>
                     <SelectContent>
-                      {tones.map((tone) => (
-                        <SelectItem key={tone} value={tone.toLowerCase()}>
-                          {tone}
+                      {formats.map((format) => (
+                        <SelectItem key={format} value={format}>
+                          {format}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Video Length */}
+                <div className="space-y-2">
+                  <Label>Video Length *</Label>
+                  <Select
+                    required
+                    value={formData.videoLength}
+                    onValueChange={(val) => handleInputChange("videoLength", val)}
+                  >
+                    <SelectTrigger className="bg-secondary/50">
+                      <SelectValue placeholder="Select length" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {videoLengths.map((len) => (
+                        <SelectItem key={len} value={len}>
+                          {len}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
 
                 {/* Logo Upload */}
                 <div className="space-y-2">
@@ -457,7 +531,7 @@ const RequestForm = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {plans.map((plan) => (
-                        <SelectItem key={plan} value={plan}>
+                        <SelectItem key={plan} value={plan} disabled={plan.includes("coming soon")}>
                           {plan}
                         </SelectItem>
                       ))}
@@ -484,7 +558,7 @@ const RequestForm = () => {
                           Standard (48 hours)
                         </SelectItem>
                         <SelectItem value="express">
-                          Express (24 hours) +₹999
+                          Express (24 hours) +$19
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -544,6 +618,34 @@ const RequestForm = () => {
           </div>
         </div>
       </div>
+
+      {showSuccessPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center relative animate-in fade-in zoom-in duration-300">
+            <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">
+              Thank you for choosing Viral Reels Content! 🎬
+            </h3>
+            <div className="space-y-4 text-muted-foreground mb-8">
+              <p>Your request has been successfully submitted.</p>
+              <p>
+                Our team will start working on creating high-quality viral reel
+                content tailored for your brand.
+              </p>
+              <p>We will get back to you shortly.</p>
+            </div>
+            <Button
+              variant="hero"
+              className="w-full"
+              onClick={() => setShowSuccessPopup(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

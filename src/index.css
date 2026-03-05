@@ -67,10 +67,6 @@
   }
 
   html {
-    /* scroll-behavior: smooth; */
-  }
-
-  html {
     background: #0f172a;
     width: 100%;
     overflow-x: hidden;
