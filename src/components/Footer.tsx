@@ -12,11 +12,6 @@ const Footer = () => {
       { name: "Pricing", to: "/pricing" },
       { name: "FAQ", to: "/faq" },
     ],
-    company: [
-      { name: "About", to: "/" },
-      { name: "Contact", to: "/contact" },
-      { name: "Careers", to: "/contact" },
-    ],
     legal: [
       { name: "Terms of Service", to: "/terms" },
       { name: "Privacy Policy", to: "/privacy" },
@@ -28,7 +23,7 @@ const Footer = () => {
       {/* Main Footer */}
       <div className="relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-2 mb-4">
@@ -45,20 +40,6 @@ const Footer = () => {
               <h4 className="font-display font-semibold mb-4">Product</h4>
               <ul className="space-y-3">
                 {footerLinks.product.map((link) => (
-                  <li key={link.name}>
-                    <Link to={link.to} className="text-pink-100/70 hover:text-white transition-colors">
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company Links */}
-            <div>
-              <h4 className="font-display font-semibold mb-4">Company</h4>
-              <ul className="space-y-3">
-                {footerLinks.company.map((link) => (
                   <li key={link.name}>
                     <Link to={link.to} className="text-pink-100/70 hover:text-white transition-colors">
                       {link.name}

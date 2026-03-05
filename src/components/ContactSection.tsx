@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Mail, MessageSquare, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -96,7 +96,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Email</h4>
-                    <p className="text-muted-foreground">support@trendcraft.studio</p>
+                    <p className="text-muted-foreground">support@viralreels.io</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -105,16 +105,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Phone</h4>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center shrink-0">
-                    <MessageSquare className="w-5 h-5 text-pink-500" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Social Media</h4>
-                    <p className="text-muted-foreground">@trendcraft.studio</p>
+                    <p className="text-muted-foreground">9710988055</p>
                   </div>
                 </div>
               </div>
