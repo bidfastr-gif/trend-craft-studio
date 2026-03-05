@@ -142,9 +142,11 @@ const PricingSection = () => {
               </h3>
               <div className="flex items-baseline gap-2 mb-2">
                 {plan.originalPrice && (
-                  <span className="text-3xl text-gray-300 relative font-medium">
+                  <span className="text-3xl text-gray-300 relative font-medium" aria-label={`Original price ${plan.originalPrice}`}>
+                    <s className="no-underline">
                     {plan.originalPrice}
                     <span className="absolute left-0 top-1/2 w-full h-[2px] bg-red-600 -rotate-12 transform -translate-y-1/2 scale-110" />
+                    </s>
                   </span>
                 )}
                 <span className="text-4xl font-display font-bold">{plan.price}</span>

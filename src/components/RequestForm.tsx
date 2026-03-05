@@ -43,7 +43,6 @@ const formats = [
 const videoLengths = ["15s", "30s", "45s"];
 
 const plans = [
-  "Test Plan ($1)",
   "Starter ($49)",
   "Creator (coming soon)",
 ];
@@ -205,7 +204,7 @@ const RequestForm = () => {
       }
 
       const planToAmount: Record<string, number> = {
-        "Test Plan ($1)": 1,
+       /**  "Test Plan ($1)": 1,*/
         "Starter ($49)": 49,
       };
       const baseAmount = planToAmount[formData.plan];
