@@ -136,72 +136,8 @@ const RequestForm = () => {
         return;
       }
 
-      if (logoFile) {
-        const ext = logoFile.name.split(".").pop() || "png";
-        const path = `logos/${requestId}.${ext}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("brand-logos")
-          .upload(path, logoFile, {
-            cacheControl: "3600",
-            upsert: false,
-            contentType: logoFile.type || undefined,
-          });
-        if (uploadError) throw uploadError;
-        logoPath = uploadData?.path ?? path;
-        const { data } = supabase.storage
-          .from("brand-logos")
-          .getPublicUrl(logoPath);
-        logoUrl = data.publicUrl || null;
-      }
+      // Logic moved to post-payment handler
 
-      const { error } = await supabase.from("requests").insert([
-        {
-          id: requestId,
-          video_description: videoDescriptionWithMeta,
-          reel_link: formData.reelLink,
-          brand_name: formData.brandName,
-          industry: formData.industry,
-          logo_filename: logoUrl || logoPath || formData.fileName,
-          offer_cta: formData.offerCta,
-          plan: formData.plan,
-          delivery_preference: formData.deliveryPreference,
-          whatsapp: formData.whatsapp,
-          email: formData.email,
-          format: formData.format,
-          video_length: formData.videoLength,
-          status: "pending_payment", // Initial status
-        }
-      ]);
-
-      if (error) throw error;
-
-      try {
-        await fetch("https://formspree.io/f/xgolyeal", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            requestId,
-            videoDescription: videoDescriptionWithMeta,
-            format: formData.format,
-            videoLength: formData.videoLength,
-            reelLink: formData.reelLink,
-            brandName: formData.brandName,
-            industry: formData.industry,
-            offerCta: formData.offerCta,
-            plan: formData.plan,
-            deliveryPreference: formData.deliveryPreference,
-            whatsapp: formData.whatsapp,
-            email: formData.email,
-          logoUrl: logoUrl,
-            status: "pending_payment",
-          }),
-        });
-      } catch (formspreeErr) {
-        console.error("Error sending data to Formspree:", formspreeErr);
-      }
 
       const planToAmount: Record<string, number> = {
        /**  "Test Plan ($1)": 1,*/
@@ -241,15 +177,51 @@ const RequestForm = () => {
         theme: { color: "#f31260" },
         handler: async (response: RazorpayResponse) => {
           try {
-            // 1. Update Supabase
-            const { error: updateError } = await supabase
-              .from("requests")
-              .update({ status: "paid" })
-              .eq("id", requestId);
+            // 1. Upload Logo
+            let logoPath: string | null = null;
+            let logoUrl: string | null = null;
 
-            if (updateError) throw updateError;
+            if (logoFile) {
+              const ext = logoFile.name.split(".").pop() || "png";
+              const path = `logos/${requestId}.${ext}`;
+              const { data: uploadData, error: uploadError } = await supabase.storage
+                .from("brand-logos")
+                .upload(path, logoFile, {
+                  cacheControl: "3600",
+                  upsert: false,
+                  contentType: logoFile.type || undefined,
+                });
+              if (uploadError) throw uploadError;
+              logoPath = uploadData?.path ?? path;
+              const { data } = supabase.storage
+                .from("brand-logos")
+                .getPublicUrl(logoPath);
+              logoUrl = data.publicUrl || null;
+            }
 
-            // 2. Send to Formspree
+            // 2. Insert into Supabase
+            const { error: insertError } = await supabase.from("requests").insert([
+              {
+                id: requestId,
+                video_description: videoDescriptionWithMeta,
+                reel_link: formData.reelLink,
+                brand_name: formData.brandName,
+                industry: formData.industry,
+                logo_filename: logoUrl || logoPath || formData.fileName,
+                offer_cta: formData.offerCta,
+                plan: formData.plan,
+                delivery_preference: formData.deliveryPreference,
+                whatsapp: formData.whatsapp,
+                email: formData.email,
+                format: formData.format,
+                video_length: formData.videoLength,
+                status: "paid",
+              }
+            ]);
+
+            if (insertError) throw insertError;
+
+            // 3. Send to Formspree
             try {
               await fetch("https://formspree.io/f/xgolyeal", {
                 method: "POST",
