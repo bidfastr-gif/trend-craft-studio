@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Send, Sparkles, CreditCard, CheckCircle } from "lucide-react";
+import { Upload, Sparkles, CreditCard, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -110,8 +110,6 @@ const RequestForm = () => {
 
     try {
       const requestId = crypto.randomUUID();
-      let logoPath: string | null = null;
-      let logoUrl: string | null = null;
 
       const videoDescriptionWithMeta = [
         formData.format && `Format: ${formData.format}`,
