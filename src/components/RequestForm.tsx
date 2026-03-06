@@ -44,6 +44,7 @@ const videoLengths = ["15s", "30s", "45s"];
 
 const plans = [
   "Starter ($49)",
+  "Test Plan (₹1)",
   "Creator (coming soon)",
 ];
 
@@ -138,7 +139,7 @@ const RequestForm = () => {
 
 
       const planToAmount: Record<string, number> = {
-       /**  "Test Plan ($1)": 1,*/
+        "Test Plan (₹1)": 1,
         "Starter ($49)": 49,
       };
       const baseAmount = planToAmount[formData.plan];
@@ -148,6 +149,9 @@ const RequestForm = () => {
         return;
       }
 
+      const isINR = formData.plan.includes("₹");
+      const currency = isINR ? "INR" : "USD";
+
       const deliveryFee =
         formData.deliveryPreference === "express" ? 19 : 0;
       const totalAmount = baseAmount + deliveryFee;
@@ -156,7 +160,7 @@ const RequestForm = () => {
       const options: RazorpayOptions = {
         key: keyId,
         amount: amountSubunits.toString(),
-        currency: "USD",
+        currency: currency,
         name: "Viral Reels",
         description: formData.plan || "Trending video order",
         method: {
